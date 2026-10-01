@@ -29,6 +29,9 @@
   .qr img, .qr canvas { display: block; }
   #ql { position: fixed; left: 0; top: 0; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
   footer { font-size: 12px; color: var(--muted); }
+  #xr { display: none; position: fixed; inset: 0; pointer-events: none; }
+  #xr .hint { position: absolute; left: 50%; bottom: calc(28px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: rgba(0,0,0,0.55); color: #fff; padding: 12px 18px; border-radius: 999px; font: 500 15px/1.3 'Roboto', Arial, sans-serif; white-space: nowrap; }
+  #xr .exit { position: absolute; right: 16px; top: calc(16px + env(safe-area-inset-top, 0px)); pointer-events: auto; background: rgba(0,0,0,0.55); color: #fff; border: 0; width: 42px; height: 42px; border-radius: 50%; font-size: 22px; line-height: 1; }
 </style>
 </head>
 <body>
@@ -46,9 +49,84 @@
   <footer>Autobahn Consultants · team@autobahnconsultants.com</footer>
 </main>
 
+<div id="xr"><div class="hint" id="hint">Point your phone at the floor</div><button class="exit" id="exit" aria-label="Close">×</button></div>
+
 <!-- iOS Quick Look launcher (needs an <img> child to be treated as an AR link) -->
 <a id="ql" rel="ar" href="#"><img alt="" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></a>
 
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+window.startWebXR = async function (glbUrl, link) {
+  const overlay = document.getElementById('xr'), hint = document.getElementById('hint'), exitBtn = document.getElementById('exit');
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setPixelRatio(window.devicePixelRatio); renderer.setSize(innerWidth, innerHeight);
+  renderer.xr.enabled = true; renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.domElement.style.cssText = 'position:fixed;inset:0;';
+  document.body.appendChild(renderer.domElement);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(70, innerWidth / innerHeight, 0.01, 40);
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x888888, 1.2));
+  const sun = new THREE.DirectionalLight(0xffffff, 1.4); sun.position.set(1, 3, 2); scene.add(sun);
+
+  const reticle = new THREE.Mesh(new THREE.RingGeometry(0.12, 0.16, 48).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ color: 0xffffff }));
+  reticle.matrixAutoUpdate = false; reticle.visible = false; scene.add(reticle);
+
+  const book = (await new GLTFLoader().loadAsync(glbUrl)).scene; book.visible = false; scene.add(book);
+  const bookMeshes = []; book.traverse(o => { if (o.isMesh) bookMeshes.push(o); });
+
+  let session;
+  try {
+    session = await navigator.xr.requestSession('immersive-ar', { requiredFeatures: ['hit-test'], optionalFeatures: ['dom-overlay'], domOverlay: { root: overlay } });
+  } catch (e) { renderer.domElement.remove(); return; }
+  overlay.style.display = 'block'; hint.textContent = 'Point your phone at the floor';
+  renderer.xr.setReferenceSpaceType('local');
+  await renderer.xr.setSession(session);
+
+  const viewerSpace = await session.requestReferenceSpace('viewer');
+  const hitSource = await session.requestHitTestSource({ space: viewerSpace });
+  const localSpace = renderer.xr.getReferenceSpace();
+  const ray = new THREE.Raycaster();
+  let placed = false;
+
+  function place() {
+    const pos = new THREE.Vector3(), q = new THREE.Quaternion(), s = new THREE.Vector3();
+    reticle.matrix.decompose(pos, q, s);
+    book.position.copy(pos);
+    const camPos = new THREE.Vector3().setFromMatrixPosition(camera.matrixWorld);
+    book.rotation.set(0, Math.atan2(camPos.x - pos.x, camPos.z - pos.z), 0);   // front cover faces you
+    book.visible = true; reticle.visible = false; placed = true;
+    hint.textContent = 'Tap the book';
+  }
+
+  session.addEventListener('select', (ev) => {
+    if (!placed) { if (reticle.visible) place(); return; }
+    const frame = ev.frame, pose = frame.getPose(ev.inputSource.targetRaySpace, localSpace);
+    if (!pose) return;
+    const m = new THREE.Matrix4().fromArray(pose.transform.matrix);
+    ray.ray.origin.setFromMatrixPosition(m);
+    ray.ray.direction.set(0, 0, -1).transformDirection(m);
+    if (ray.intersectObjects(bookMeshes, true).length) { hint.textContent = 'Opening…'; session.end().then(() => { location.href = link; }); }
+  });
+  exitBtn.onclick = () => session.end();
+  session.addEventListener('end', () => { overlay.style.display = 'none'; renderer.setAnimationLoop(null); renderer.domElement.remove(); });
+
+  renderer.setAnimationLoop((t, frame) => {
+    if (frame && !placed) {
+      const hits = frame.getHitTestResults(hitSource);
+      if (hits.length) {
+        const pose = hits[0].getPose(localSpace);
+        reticle.visible = true; reticle.matrix.fromArray(pose.transform.matrix);
+        hint.textContent = 'Tap to stand the book here';
+      } else { reticle.visible = false; hint.textContent = 'Point your phone at the floor'; }
+    }
+    renderer.render(scene, camera);
+  });
+};
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
 (function () {
@@ -76,14 +154,18 @@
     ready();
     go.addEventListener('click', function () { ql.click(); });
   } else if (isAndroid) {
-    // Scene Viewer shows the title as a tappable link at the bottom of the AR view; that link opens the book page.
     ready();
     go.addEventListener('click', function () {
+      if (navigator.xr && window.startWebXR) {
+        navigator.xr.isSessionSupported('immersive-ar').then(function (ok) { ok ? window.startWebXR(GLB, PDF) : sceneViewer(); }).catch(sceneViewer);
+      } else { sceneViewer(); }
+    });
+    function sceneViewer() {
       var sv = 'arvr.google.com/scene-viewer/1.0?file=' + encodeURIComponent(GLB)
              + '&mode=ar_only&resizable=false&title=' + encodeURIComponent('Need directions? Tap me')
              + '&link=' + encodeURIComponent(PDF);
       location.href = 'intent://' + sv + '#Intent;scheme=https;package=com.google.ar.core;action=android.intent.action.VIEW;S.browser_fallback_url=' + encodeURIComponent(location.href) + ';end;';
-    });
+    }
   } else {
     go.hidden = true; document.getElementById('desk').style.display = 'grid';
   }
