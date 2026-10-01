@@ -53,9 +53,9 @@
 <script>
 (function () {
   var PDF   = "https://team.autobahnconsultants.com/free-book-ryb";
-  var TITLE = "Rock Your Business";
+  var TITLE = "Need directions?";
   var SUB   = "Everything we learned from a few hundred CEOs.";
-  var BASE  = location.href.replace(/app\.html.*$/, '');
+  var BASE  = /^https?:/.test(location.protocol) ? location.href.replace(/app\.html.*$/, '') : 'https://skyeac.github.io/rockyourbusiness/';
   var GLB   = BASE + 'book.glb';
   var USDZ  = BASE + 'book.usdz';
 
@@ -69,7 +69,7 @@
   if (isIOS) {
     // Quick Look shows an "Open it" banner; tapping it tells this page, and we open the book page.
     ql.addEventListener('message', function (e) { if (e.data === '_apple_ar_quicklook_button_tapped') location.href = PDF; }, false);
-    ql.href = USDZ + '#callToAction=' + encodeURIComponent('Open it')
+    ql.href = USDZ + '#callToAction=' + encodeURIComponent('Tap me')
             + '&checkoutTitle=' + encodeURIComponent(TITLE)
             + '&checkoutSubtitle=' + encodeURIComponent(SUB)
             + '&allowsContentScaling=0';
@@ -80,7 +80,7 @@
     ready();
     go.addEventListener('click', function () {
       var sv = 'arvr.google.com/scene-viewer/1.0?file=' + encodeURIComponent(GLB)
-             + '&mode=ar_only&resizable=false&title=' + encodeURIComponent(TITLE + ' · Open it')
+             + '&mode=ar_only&resizable=false&title=' + encodeURIComponent('Need directions? Tap me')
              + '&link=' + encodeURIComponent(PDF);
       location.href = 'intent://' + sv + '#Intent;scheme=https;package=com.google.ar.core;action=android.intent.action.VIEW;S.browser_fallback_url=' + encodeURIComponent(location.href) + ';end;';
     });
@@ -90,7 +90,7 @@
 })();
 </script>
 <script>
-  try { new QRCode(document.getElementById('qr'), { text: location.origin + location.pathname.replace(/app\.html$/, ''), width: 160, height: 160, correctLevel: QRCode.CorrectLevel.M }); }
+  try { new QRCode(document.getElementById('qr'), { text: 'https://skyeac.github.io/rockyourbusiness/', width: 160, height: 160, correctLevel: QRCode.CorrectLevel.M }); }
   catch (e) { document.getElementById('qr').textContent = location.href; }
 </script>
 </body>
