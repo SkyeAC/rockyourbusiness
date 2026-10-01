@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Everything we learned from a few hundred CEOs. Open it. Rock Your Business by Jonathan Slain, Autobahn Consultants.">
+<meta property="og:title" content="Everything we learned from a few hundred CEOs. Open it.">
+<meta property="og:description" content="Rock Your Business in your space. Tap View in your space.">
+<title>Open it | Autobahn Consultants</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap">
+<style>
+  :root { --green: #0E765A; --green2: #0C824C; --yellow: #FFF400; --grey: #58585A; --muted: #cfe6dc; --white: #ffffff; }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body { background: var(--green); color: var(--white); font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif; display: grid; place-items: center; padding: 24px 20px calc(24px + env(safe-area-inset-bottom, 0px)); }
+  main { width: 100%; max-width: 420px; display: grid; gap: 28px; text-align: center; }
+  .logo { height: 40px; width: auto; display: block; margin: 0 auto; background: var(--white); padding: 8px 14px; border-radius: 8px; box-sizing: content-box; }
+  .bar { height: 6px; width: 56px; background: var(--yellow); border-radius: 2px; margin: 0 auto; }
+  h1 { font-weight: 300; font-size: clamp(30px, 8vw, 42px); line-height: 1.15; margin: 0; letter-spacing: -0.01em; }
+  h1 b { font-weight: 700; display: block; }
+  p { margin: 0; color: var(--muted); font-size: 17px; line-height: 1.5; }
+  .cta { display: inline-grid; place-items: center; width: 100%; padding: 18px 24px; border-radius: 12px; border: 0; background: var(--white); color: var(--green); font: 700 18px/1 'Roboto', Arial, sans-serif; cursor: pointer; box-shadow: 0 10px 30px rgba(0,0,0,0.25); }
+  .cta:active { transform: translateY(1px); }
+  .cta[disabled] { opacity: 0.6; cursor: default; }
+  .cta[hidden] { display: none; }
+  .small { font-size: 13px; color: var(--muted); }
+  .desk { display: none; gap: 14px; justify-items: center; }
+  .qr { background: #fff; padding: 10px; border-radius: 10px; }
+  .qr img, .qr canvas { display: block; }
+  #ql { position: fixed; left: 0; top: 0; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+  footer { font-size: 12px; color: var(--muted); }
+</style>
+</head>
+<body>
+<main>
+  <svg class="logo" viewBox="3 -278 995 277" role="img" aria-label="Autobahn Consultants" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="ag" x1="0" x2="1"><stop offset="0" stop-color="#0E765A"/><stop offset="1" stop-color="#1a9a46"/></linearGradient></defs><circle cx="142" cy="-140" r="136" fill="url(#ag)"/><path fill="#2b2b2b" fill-rule="evenodd" d="M71 -20 52 -34 32 -54 18 -76 8 -102 4 -126 4 -160 11 -186 22 -210 37 -231 59 -251 84 -266 106 -274 142 -278 167 -276 185 -272 211 -260 229 -247 251 -226 265 -204 274 -181 280 -156 280 -124 273 -94 263 -72 240 -42 220 -25 198 -13 174 -5 148 -1 119 -3 90 -11ZM215 -250 193 -263 177 -268 161 -271 128 -272 96 -264 80 -257 59 -244 42 -228 29 -209 18 -188 13 -171 10 -153 9 -135 12 -111 19 -90 30 -68 31 -67 41 -76ZM187 -14 216 -29 241 -51 256 -72 267 -95 273 -119 275 -144 272 -169 263 -194 253 -212 69 -29 93 -16 126 -8 159 -8ZM55 -40 242 -227 238 -232 50 -44ZM234 -235 229 -240 227 -237 42 -52 44 -50 46 -48 49 -50ZM250 -217 246 -222 59 -36 64 -32 67 -35ZM41 -60 224 -244 220 -247 35 -62 37 -58Z"/><path fill="#58585A" fill-rule="evenodd" d="M420 -115 410 -120 404 -126 399 -133 396 -144 395 -249 407 -249 408 -144 411 -136 416 -130 423 -126 432 -125 441 -127 448 -131 456 -147 456 -249 468 -249 468 -153 466 -138 461 -128 451 -118 437 -114ZM733 -116 768 -249 781 -249 816 -115 804 -115 796 -146 753 -146 746 -115ZM792 -158 780 -209 775 -233 756 -158ZM937 -249 988 -138 986 -249 999 -249 999 -115 986 -115 936 -226 937 -115 925 -115 925 -249ZM479 -238 479 -249 550 -249 550 -238 521 -238 521 -115 509 -115 509 -238ZM828 -116 828 -249 840 -249 840 -189 888 -189 888 -249 900 -249 900 -115 888 -115 888 -177 840 -177 840 -115ZM658 -116 658 -249 696 -249 711 -244 717 -239 722 -230 725 -209 720 -195 715 -188 708 -185 720 -179 728 -166 731 -148 726 -132 719 -124 705 -116ZM717 -142 718 -152 717 -161 708 -173 697 -178 670 -178 670 -127 702 -127 713 -134ZM710 -201 713 -216 711 -227 707 -232 696 -237 670 -238 670 -190 695 -190 704 -194ZM301 -116 336 -249 350 -249 385 -116 372 -116 364 -146 322 -146 314 -115ZM362 -157 349 -207 343 -233 325 -158ZM567 -128 562 -141 560 -155 560 -210 563 -228 569 -239 580 -248 594 -252 611 -250 624 -243 629 -237 636 -219 637 -151 633 -136 624 -122 607 -114 592 -113 583 -116 577 -119ZM619 -134 624 -149 623 -220 619 -230 613 -236 603 -240 591 -239 579 -232 573 -219 574 -144 580 -132 591 -125 602 -125 609 -126Z"/><path fill="#0E765A" fill-rule="evenodd" d="M733 -20 727 -30 727 -85 733 -85 734 -29 738 -24 745 -22 752 -24 757 -30 758 -85 764 -85 762 -27 758 -21 751 -17 740 -17ZM549 -21 543 -32 544 -73 547 -80 552 -84 560 -86 567 -85 576 -79 579 -67 574 -67 572 -74 565 -80 556 -80 552 -77 549 -69 549 -32 553 -24 560 -22 569 -24 574 -35 580 -36 579 -30 574 -21 566 -17 556 -16ZM687 -21 684 -26 682 -35 688 -34 691 -26 697 -22 707 -23 713 -30 713 -36 710 -42 688 -58 683 -67 684 -76 688 -82 696 -86 706 -86 716 -78 718 -68 712 -68 709 -78 701 -80 692 -77 690 -73 690 -67 693 -61 716 -44 719 -38 719 -28 713 -20 707 -16 695 -16ZM643 -85 669 -30 668 -85 674 -85 674 -17 668 -17 642 -72 642 -18 637 -17 637 -85ZM781 -85 781 -23 806 -23 806 -17 775 -17 775 -85ZM591 -23 587 -35 588 -72 591 -78 597 -84 604 -86 614 -85 620 -81 625 -70 626 -39 624 -27 619 -20 611 -16 601 -16ZM616 -26 619 -34 619 -70 613 -79 603 -80 597 -77 594 -70 594 -32 597 -25 602 -22 610 -22ZM797 -79 797 -85 833 -85 833 -79 819 -79 819 -17 812 -17 812 -79ZM923 -79 923 -85 959 -85 959 -79 944 -79 944 -17 938 -17 938 -79ZM885 -85 910 -30 910 -85 916 -85 916 -17 910 -18 885 -72 885 -17 879 -17 879 -85ZM971 -18 964 -24 961 -35 967 -35 969 -29 972 -24 982 -22 987 -24 991 -28 992 -36 988 -43 966 -59 963 -65 963 -73 965 -79 971 -84 984 -86 994 -79 997 -69 992 -68 989 -77 981 -80 972 -78 969 -73 969 -68 973 -61 994 -46 998 -38 998 -30 995 -23 989 -18 979 -16ZM831 -18 848 -85 855 -85 873 -17 866 -17 862 -32 855 -33 841 -33 837 -18ZM860 -39 851 -76 843 -39Z"/></svg>
+  <div class="bar"></div>
+  <h1>Everything we learned from a few hundred CEOs.<b>Open it.</b></h1>
+  <p>Tap below, point your phone at the floor, and take a step back.</p>
+  <button class="cta" id="go" disabled>Getting ready…</button>
+  <div class="desk" id="desk">
+    <p>Open this on your phone to see it in your space.</p>
+    <div class="qr" id="qr"></div>
+  </div>
+  <div class="small" id="note"></div>
+  <footer>Autobahn Consultants · team@autobahnconsultants.com</footer>
+</main>
+
+<!-- iOS Quick Look launcher (needs an <img> child to be treated as an AR link) -->
+<a id="ql" rel="ar" href="#"><img alt="" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></a>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+(function () {
+  var PDF   = "https://team.autobahnconsultants.com/free-book-ryb";
+  var TITLE = "Need directions?";
+  var SUB   = "Everything we learned from a few hundred CEOs.";
+  var BASE  = /^https?:/.test(location.protocol) ? location.href.replace(/ryb\.html.*$/, '') : 'https://skyeac.github.io/rockyourbusiness/';
+  var GLB   = BASE + 'ryb-book.glb';
+  var USDZ  = BASE + 'ryb-book.usdz';
+
+  var go = document.getElementById('go'), note = document.getElementById('note'), ql = document.getElementById('ql');
+  var ua = navigator.userAgent;
+  var isIOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  var isAndroid = /Android/.test(ua);
+
+  function ready() { go.disabled = false; go.textContent = 'View in your space'; }
+
+  if (isIOS) {
+    // Quick Look shows an "Open it" banner; tapping it tells this page, and we open the book page.
+    ql.addEventListener('message', function (e) { if (e.data === '_apple_ar_quicklook_button_tapped') location.href = PDF; }, false);
+    ql.href = USDZ + '#callToAction=' + encodeURIComponent('Tap me')
+            + '&checkoutTitle=' + encodeURIComponent(TITLE)
+            + '&checkoutSubtitle=' + encodeURIComponent(SUB)
+            + '&allowsContentScaling=0';
+    ready();
+    go.addEventListener('click', function () { ql.click(); });
+  } else if (isAndroid) {
+    // Scene Viewer shows the title as a tappable link at the bottom of the AR view; that link opens the book page.
+    ready();
+    go.addEventListener('click', function () {
+      var sv = 'arvr.google.com/scene-viewer/1.0?file=' + encodeURIComponent(GLB)
+             + '&mode=ar_only&resizable=false&title=' + encodeURIComponent('Need directions? Tap me')
+             + '&link=' + encodeURIComponent(PDF);
+      location.href = 'intent://' + sv + '#Intent;scheme=https;package=com.google.ar.core;action=android.intent.action.VIEW;S.browser_fallback_url=' + encodeURIComponent(location.href) + ';end;';
+    });
+  } else {
+    go.hidden = true; document.getElementById('desk').style.display = 'grid';
+  }
+})();
+</script>
+<script>
+  try { new QRCode(document.getElementById('qr'), { text: 'https://skyeac.github.io/rockyourbusiness/', width: 160, height: 160, correctLevel: QRCode.CorrectLevel.M }); }
+  catch (e) { document.getElementById('qr').textContent = location.href; }
+</script>
+</body>
+</html>
