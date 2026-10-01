@@ -50,62 +50,44 @@
 <a id="ql" rel="ar" href="#"><img alt="" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="></a>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
-<script type="module">
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { USDZExporter } from 'three/addons/exporters/USDZExporter.js';
+<script>
+(function () {
+  var PDF   = "https://team.autobahnconsultants.com/free-book-ryb";
+  var TITLE = "Rock Your Business";
+  var SUB   = "Everything we learned from a few hundred CEOs.";
+  var BASE  = location.href.replace(/app\.html.*$/, '');
+  var GLB   = BASE + 'book.glb';
+  var USDZ  = BASE + 'book.usdz';
 
-const PDF   = "https://team.autobahnconsultants.com/free-book-ryb";
-const TITLE = "Rock Your Business";
-const SUB   = "Everything we learned from a few hundred CEOs.";
-const BASE  = location.href.replace(/app\.html.*$/, '');
-const GLB   = BASE + 'book.glb';
+  var go = document.getElementById('go'), note = document.getElementById('note'), ql = document.getElementById('ql');
+  var ua = navigator.userAgent;
+  var isIOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  var isAndroid = /Android/.test(ua);
 
-const go = document.getElementById('go'), note = document.getElementById('note'), ql = document.getElementById('ql');
-const ua = navigator.userAgent;
-const isIOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-const isAndroid = /Android/.test(ua);
+  function ready() { go.disabled = false; go.textContent = 'View in your space'; }
 
-function showDesk() { go.hidden = true; document.getElementById('desk').style.display = 'grid'; }
-function ready() { go.disabled = false; go.textContent = 'View in your space'; }
-
-let usdzURL = null;
-
-if (isIOS) {
-  // Build a USDZ from the book model so Quick Look can show it, with an "Open it" banner that links to the PDF.
-  new GLTFLoader().load(GLB, async (gltf) => {
-    try {
-      const bytes = await new USDZExporter().parseAsync(gltf.scene, { quickLookCompatible: true, ar: { anchoring: { type: 'plane' }, planeAnchoring: { alignment: 'horizontal' } } });
-      usdzURL = URL.createObjectURL(new Blob([bytes], { type: 'model/vnd.usdz+zip' }));
-      ready();
-    } catch (e) { note.textContent = 'Something went wrong building the 3D book. Try refreshing.'; }
-  }, undefined, () => { note.textContent = 'Could not load the 3D book. Try refreshing.'; });
-
-  // When they tap the banner inside Quick Look, Safari tells the page; we open the book.
-  ql.addEventListener('message', (e) => { if (e.data === '_apple_ar_quicklook_button_tapped') location.href = PDF; }, false);
-
-  go.addEventListener('click', () => {
-    if (!usdzURL) return;
-    const q = '#callToAction=' + encodeURIComponent('Open it')
+  if (isIOS) {
+    // Quick Look shows an "Open it" banner; tapping it tells this page, and we open the book page.
+    ql.addEventListener('message', function (e) { if (e.data === '_apple_ar_quicklook_button_tapped') location.href = PDF; }, false);
+    ql.href = USDZ + '#callToAction=' + encodeURIComponent('Open it')
             + '&checkoutTitle=' + encodeURIComponent(TITLE)
             + '&checkoutSubtitle=' + encodeURIComponent(SUB)
             + '&allowsContentScaling=0';
-    ql.href = usdzURL + q;
-    ql.click();
-  });
-} else if (isAndroid) {
-  // Scene Viewer shows the title as a tappable link at the bottom of the AR view; that link opens the PDF.
-  ready();
-  go.addEventListener('click', () => {
-    const sv = 'https://arvr.google.com/scene-viewer/1.0?file=' + encodeURIComponent(GLB)
+    ready();
+    go.addEventListener('click', function () { ql.click(); });
+  } else if (isAndroid) {
+    // Scene Viewer shows the title as a tappable link at the bottom of the AR view; that link opens the book page.
+    ready();
+    go.addEventListener('click', function () {
+      var sv = 'arvr.google.com/scene-viewer/1.0?file=' + encodeURIComponent(GLB)
              + '&mode=ar_only&resizable=false&title=' + encodeURIComponent(TITLE + ' · Open it')
              + '&link=' + encodeURIComponent(PDF);
-    location.href = 'intent://' + sv.replace(/^https:\/\//, '')
-      + '#Intent;scheme=https;package=com.google.ar.core;action=android.intent.action.VIEW;S.browser_fallback_url=' + encodeURIComponent(location.href) + ';end;';
-  });
-} else {
-  showDesk();
-}
+      location.href = 'intent://' + sv + '#Intent;scheme=https;package=com.google.ar.core;action=android.intent.action.VIEW;S.browser_fallback_url=' + encodeURIComponent(location.href) + ';end;';
+    });
+  } else {
+    go.hidden = true; document.getElementById('desk').style.display = 'grid';
+  }
+})();
 </script>
 <script>
   try { new QRCode(document.getElementById('qr'), { text: location.origin + location.pathname.replace(/app\.html$/, ''), width: 160, height: 160, correctLevel: QRCode.CorrectLevel.M }); }
